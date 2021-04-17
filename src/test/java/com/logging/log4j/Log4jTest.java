@@ -24,7 +24,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class Log4jTest {
 
     @Rule
-    public LoggerContextRule init = new LoggerContextRule("log4j2.xml");
+    public LoggerContextRule init = new LoggerContextRule("log4j/log4j2.xml");
     @Rule
     public final SystemOutRule sysOut = new SystemOutRule().enableLog();
 
@@ -58,7 +58,7 @@ public class Log4jTest {
         }
     }
 
-    private Condition<String> onlyOneOfEachLevel() {
+    private static Condition<String> onlyOneOfEachLevel() {
         return new Condition<>("All log levels only once") {
             @Override
             public boolean matches(String log) {
@@ -87,7 +87,7 @@ public class Log4jTest {
             return new LogStringAssert(log);
         }
 
-        public LogStringAssert containsAllLogLevelsOnce() {
+        public LogStringAssert containsOnlyOneOfEachLevel() {
             isNotNull();
             final String log = actual;
             for (Level level: ALL_LOG_LEVELS) {
