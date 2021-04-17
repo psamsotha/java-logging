@@ -3,3 +3,5 @@
 Project to show how to use different loggers in Java.
 
 ### Loggers used:
+
+* Log4j2
