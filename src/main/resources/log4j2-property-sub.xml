@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="debug" name="RoutingTest" packages="org.apache.logging.log4j.test">
+    <!-- Log4j 2 supports the ability to specify tokens in the configuration as references to properties defined elsewhere. -->
+    <!-- this allows variables declared as ${name} to be resolved using properties declared in the configuration itself. -->
+    <Properties>
+        <Property name="filename">target/rolling1/rollingtest-$${sd:type}.log</Property>
+    </Properties>
+    <ThresholdFilter level="debug"/>
+
+    <!-- Log4j also supports the syntax ${prefix:name} where the prefix identifies tells Log4j that variable
+         name should be evaluated in a specific context -->
+    <!-- base64 - Base64 encoded data. The format is ${base64:Base64_encoded_data}.
+             For example: ${base64:SGVsbG8gV29ybGQhCg==} yields Hello World!. -->
+    <!-- bundle	- Resource bundle. The format is ${bundle:BundleName:BundleKey}. The bundle name follows package
+             naming conventions, for example: ${bundle:com.domain.Messages:MyKey}. -->
+    <!-- ctx - Thread Context Map (MDC) -->
+    <!-- date - Inserts the current date and/or time using the specified format -->
+    <!-- env  - System environment variables. The formats are ${env:ENV_NAME} and ${env:ENV_NAME:-default_value}. -->
+    <!-- jndi - A value set in the default JNDI Context. -->
+    <!-- jvmrunargs	- A JVM input argument accessed through JMX, but not a main argument;
+             see RuntimeMXBean.getInputArguments(). Not available on Android. -->
+    <!-- log4j - Log4j configuration properties. The expressions ${log4j:configLocation} and ${log4j:configParentLocation}
+             respectively provide the absolute path to the log4j configuration file and its parent folder. -->
+    <!-- main - A value set with MapLookup.setMainArguments(String[]) -->
+    <!-- map - A value from a MapMessage -->
+    <!-- sd - A value from a StructuredDataMessage. The key "id" will return the name of the StructuredDataId
+             without the enterprise number. The key "type" will return the message type. Other keys will retrieve
+             individual elements from the Map. -->
+    <!-- sys - System properties. The formats are ${sys:some.property} and ${sys:some.property:-default_value}. -->
+    <Appenders>
+        <Console name="STDOUT">
+            <PatternLayout pattern="%m%n"/>
+            <ThresholdFilter level="debug"/>
+        </Console>
+        <Routing name="Routing">
+            <Routes pattern="$${sd:type}">
+                <Route>
+                    <RollingFile name="Rolling-${sd:type}" fileName="${filename}"
+                                 filePattern="target/rolling1/test1-${sd:type}.%i.log.gz">
+                        <PatternLayout>
+                            <pattern>%d %p %c{1.} [%t] %m%n</pattern>
+                        </PatternLayout>
+                        <SizeBasedTriggeringPolicy size="500" />
+                    </RollingFile>
+                </Route>
+                <Route ref="STDOUT" key="Audit"/>
+            </Routes>
+        </Routing>
+    </Appenders>
+
+    <Loggers>
+        <Logger name="EventLogger" level="info" additivity="false">
+            <AppenderRef ref="Routing"/>
+        </Logger>
+
+        <Root level="error">
+            <AppenderRef ref="STDOUT"/>
+        </Root>
+    </Loggers>
+
+</Configuration>
