@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="error">
+    <!-- Docs: https://logging.apache.org/log4j/2.x/manual/appenders.html#JPAAppender -->
+    <!-- As of Log4j 2.11.0, JPA support has moved from the existing module log4j-core to the new module log4j-jpa. -->
+    <!-- The JPAAppender writes log events to a relational database table using the Java Persistence API 2.1.
+         It requires the API and a provider implementation be on the classpath. It also requires a decorated entity
+         configured to persist to the table desired. The entity should either
+         extend org.apache.logging.log4j.core.appender.db.jpa.BasicLogEventEntity (if you mostly want to use the default mappings)
+         and provide at least an @Id property, or org.apache.logging.log4j.core.appender.db.jpa.AbstractLogEventWrapperEntity
+         (if you want to significantly customize the mappings) -->
+    <Appenders>
+        <JPA name="databaseAppender" persistenceUnitName="loggingPersistenceUnit"
+             entityClassName="com.logging.log4j.JpaLogEntity" />
+    </Appenders>
+    <Loggers>
+        <Root level="warn">
+            <AppenderRef ref="databaseAppender"/>
+        </Root>
+    </Loggers>
+</Configuration>

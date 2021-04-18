@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="error">
+    <!-- Docs: https://logging.apache.org/log4j/2.x/manual/appenders.html#HttpAppender -->
+    <!-- The HttpAppender sends log events over HTTP. A Layout must be provided to format the LogEvent. -->
+    <!-- Will set the Content-Type header according to the layout. Additional headers can be specified with embedded Property elements. -->
+    <!-- Will wait for response from server, and throw error if no 2xx response is received. -->
+    <!-- Implemented with HttpURLConnection. -->
+    <Appenders>
+        <Http name="Http" url="https://localhost:9200/test/log4j/">
+            <Property name="X-Java-Runtime" value="$${java:runtime}" />
+            <JsonLayout properties="true"/>
+            <SSL>
+                <KeyStore   location="log4j2-keystore.jks" passwordEnvironmentVariable="KEYSTORE_PASSWORD"/>
+                <TrustStore location="truststore.jks"      passwordFile="${sys:user.home}/truststore.pwd"/>
+            </SSL>
+        </Http>
+    </Appenders>
+</Configuration>

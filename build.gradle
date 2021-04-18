@@ -29,6 +29,8 @@ dependencyManagement {
 dependencies {
     implementation "org.apache.logging.log4j:log4j-api"
     implementation "org.apache.logging.log4j:log4j-core"
+    implementation "org.apache.logging.log4j:log4j-jpa"
+    implementation "org.hibernate:hibernate-agroal:5.4.30.Final"
 
     testImplementation "org.apache.logging.log4j:log4j-core:$log4jVersion:tests"
     testImplementation "junit:junit:4.12"

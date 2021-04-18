@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="warn" name="MyApp" packages="">
+    <!-- The AsyncAppender accepts references to other Appenders and causes LogEvents to be written
+         to them on a separate Thread. Note that exceptions while writing to those Appenders will be
+         hidden from the application. The AsyncAppender should be configured after the appenders it
+         references to allow it to shut down properly. -->
+    <!-- Docs: https://logging.apache.org/log4j/2.x/manual/appenders.html#AsyncAppender -->
+    <Appenders>
+        <File name="MyFile" fileName="logs/app.log">
+            <PatternLayout>
+                <Pattern>%d %p %c{1.} [%t] %m%n</Pattern>
+            </PatternLayout>
+        </File>
+        <Async name="Async">
+            <AppenderRef ref="MyFile"/>
+        </Async>
+    </Appenders>
+    <Loggers>
+        <Root level="error">
+            <AppenderRef ref="Async"/>
+        </Root>
+    </Loggers>
+</Configuration>

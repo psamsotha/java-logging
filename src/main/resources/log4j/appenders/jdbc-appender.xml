@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="error">
+    <!-- Docs: https://logging.apache.org/log4j/2.x/manual/appenders.html#JDBCAppender -->
+    <!-- The JDBCAppender writes log events to a relational database table using standard JDBC.
+         It can be configured to obtain JDBC connections using a JNDI DataSource or a custom factory method.
+         Whichever approach you take, it must be backed by a connection pool. Otherwise, logging performance
+         will suffer greatly. If batch statements are supported by the configured JDBC driver and a bufferSize
+         is configured to be a positive number, then log events will be batched. -->
+    <!-- To get off the ground quickly during development, an alternative to using a connection source based
+         on JNDI is to use the non-pooling DriverManager connection source. This connection source uses a JDBC
+         connection string, a user name, and a password. Optionally, you can also use properties. -->
+    <Appenders>
+        <JDBC name="databaseAppender" tableName="dbo.application_log">
+            <!-- You must use one of the following ConnectionSource: -->
+            <!-- <DataSource> ses JNDI -->
+            <!-- <ConnectionFactory> Points to a class-method pair to provide JDBC connections.  -->
+            <!-- <DriverManager> A quick and dirty way to get off the ground, no connection pooling. -->
+            <!-- PoolingDriver Uses Apache Commons DBCP to provide connection pooling. -->
+            <DataSource jndiName="java:/comp/env/jdbc/LoggingDataSource" />
+            <Column name="eventDate" isEventTimestamp="true" />
+            <Column name="level" pattern="%level" />
+            <Column name="logger" pattern="%logger" />
+            <Column name="message" pattern="%message" />
+            <Column name="exception" pattern="%ex{full}" />
+        </JDBC>
+    </Appenders>
+    <Loggers>
+        <Root level="warn">
+            <AppenderRef ref="databaseAppender"/>
+        </Root>
+    </Loggers>
+</Configuration>

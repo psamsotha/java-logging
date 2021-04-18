@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="warn" name="MyApp" packages="">
+    <!-- Docs: https://logging.apache.org/log4j/2.x/manual/appenders.html#RollingFileAppender -->
+
+    <!-- The RollingFileAppender is an OutputStreamAppender that writes to the File named in the fileName
+         parameter and rolls the file over according the TriggeringPolicy and the RolloverPolicy.
+         Two web applications in a servlet container can have their own configuration and safely write
+         to the same file if Log4j is in a ClassLoader that is common to both of them. -->
+
+    <!-- A RollingFileAppender requires a TriggeringPolicy and a RolloverStrategy. The triggering policy
+         determines if a rollover should be performed while the RolloverStrategy defines how the rollover
+         should be done. If no RolloverStrategy is configured, RollingFileAppender will use the DefaultRolloverStrategy. -->
+
+    <!-- See documentation for rollover strategy. Currently uses a default rollover strategy. -->
+    <Appenders>
+        <RollingFile name="RollingFile" fileName="logs/app.log"
+                     filePattern="logs/$${date:yyyy-MM}/app-%d{MM-dd-yyyy}-%i.log.gz">
+            <PatternLayout>
+                <Pattern>%d %p %c{1.} [%t] %m%n</Pattern>
+            </PatternLayout>
+            <!-- The CompositeTriggeringPolicy combines multiple triggering policies and returns true if any of
+                 the configured policies return true. The CompositeTriggeringPolicy is configured simply by wrapping
+                 other policies in a Policies element. -->
+            <Policies>
+                <!-- The CronTriggeringPolicy triggers rollover based on a cron expression. This policy is
+                     controlled by a timer and is asynchronous to processing log events, so it is possible that
+                     log events from the previous or next time period may appear at the beginning or end of the
+                     log file. The filePattern attribute of the Appender should contain a timestamp otherwise
+                     the target file will be overwritten on each rollover. -->
+                <CronTriggeringPolicy schedule="0 0 12 * * ?" />
+                <!-- The OnStartupTriggeringPolicy policy causes a rollover if the log file is older than the current
+                     JVM's start time and the minimum file size is met or exceeded. -->
+                <!-- minSize  long   The minimum size the file must have to roll over. -->
+                <OnStartupTriggeringPolicy minSize="1000000" />
+                <!-- The TimeBasedTriggeringPolicy causes a rollover once the date/time pattern no longer applies
+                     to the active file. This policy accepts an interval attribute which indicates how frequently
+                     the rollover should occur based on the time pattern and a modulate boolean attribute. -->
+                <!-- interval  integer  How often a rollover should occur based on the most specific time unit in
+                                        the date pattern. For example, with a date pattern with hours as the most
+                                        specific item and and increment of 4 rollovers would occur every 4 hours.
+                                        The default value is 1. -->
+                <TimeBasedTriggeringPolicy  />
+                <!-- The SizeBasedTriggeringPolicy causes a rollover once the file has reached the specified size.
+                     The size can be specified in bytes, with the suffix KB, MB or GB, for example 20MB. -->
+                <SizeBasedTriggeringPolicy size="250 MB"/>
+            </Policies>
+        </RollingFile>
+    </Appenders>
+    <Loggers>
+        <Root level="error">
+            <AppenderRef ref="RollingFile"/>
+        </Root>
+    </Loggers>
+</Configuration>
