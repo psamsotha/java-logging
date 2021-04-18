@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration name="App config"
+               status="WARN" monitorInterval="10">
+    <Properties>
+        <Property name="filename">logs/app.log</Property>
+    </Properties>
+    <Appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+                                                                     <!-- Using $$ notation w/ctx -->
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - $${ctx:userId} - %msg%n" />
+        </Console>
+        <File name="File" fileName="${filename}">                    <!-- Using %X notation -->
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %X{userId} - %msg%n" />
+        </File>
+    </Appenders>
+    <Loggers>
+        <Root level="DEBUG">
+            <AppenderRef ref="Console" />
+            <AppenderRef ref="File" />
+        </Root>
+    </Loggers>
+</Configuration>
