@@ -1,16 +1,10 @@
 package com.logging.log4j;
 
-<<<<<<< HEAD
-import java.net.URI;
 import java.net.URISyntaxException;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.core.LoggerContext;
-=======
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
->>>>>>> ed1306e6dfa7e13606123a9d5ed5af90a15460fd
 
 /**
  * Log4j2
@@ -31,8 +25,6 @@ import org.apache.logging.log4j.Logger;
  */
 public class Log4jLogging {
 
-    // Automatically uses fully qualified class name
-<<<<<<< HEAD
     private static final Logger logger;
     private static final String configPath = "/log4j/log4j2.xml";
 
@@ -47,12 +39,7 @@ public class Log4jLogging {
         }
     }
 
-    public static void main(String... args) {
-=======
-    private static final Logger logger = LogManager.getLogger();
-
     public static void main(String... args) throws Exception {
->>>>>>> ed1306e6dfa7e13606123a9d5ed5af90a15460fd
         logger.trace("Entering application.");
         logger.debug("This is a {} using {}", "test", "interpolation");
 
